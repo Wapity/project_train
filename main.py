@@ -19,17 +19,7 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.10, random_state=42, shuffle=True)
 
-    import sys
-    param_tuning = sys.argv[1]
+    best_score, best_model = benchmark_models(
+        X_train, X_test, y_train, y_test, 'svm', tuning=False)
 
-
-    if param_tuning == 'true':
-        tuning=True
-        benchmark_models(
-            X_train, X_test, y_train, y_test, 'svm', tuning=tuning)
-
-    else :
-        tuning=False
-        benchmark_models(
-            X_train, X_test, y_train, y_test, 'svm', tuning=tuning)
-        print(best_score, best_model)
+    print(best_score, best_model)
