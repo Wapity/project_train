@@ -11,9 +11,10 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
 from sklearn.svm import SVC
+from reporting.benchmark_cv_full_reporting import benchmark_cv_full_reporting
 
 
-def benchmark_models(X_train, X_test, y_train, y_test, famille_de_model, tuning=False, nb_cv=5):
+def benchmark_models(X_train, X_test, y_train, y_test, famille_de_model, tuning=False, nb_cv=5, full_reporting=False):
     if not tuning:
         scores = []
         model_list = house_models[famille_de_model]
@@ -22,44 +23,28 @@ def benchmark_models(X_train, X_test, y_train, y_test, famille_de_model, tuning=
             scores.append(model['model'].score(X_test, y_test))
 
         index_best_model, score_max = value_index_max(scores)
-        return score_max, model_list[index_best_model]
 
-    else:
+        best_model = model_list[index_best_model]
+        y_pred = best_model['model'].predict(X_test)
 
-        model = house_models_cross_validation[famille_de_model]['model']
-        tuned_parameters = house_models_cross_validation[famille_de_model]['param_cross_validation']
-        print(model, tuned_parameters)
+        return y_pred, best_model, score_max
 
-        scores_metrics = ['precision', 'recall']
 
-        for score in scores_metrics :
+    model = house_models_cross_validation[famille_de_model]['model']
+    tuned_parameters = house_models_cross_validation[famille_de_model]['param_cross_validation']
 
-            print("# Tuning hyper-parameters for %s" % score)
-            print()
+    if not full_reporting:
 
-            clf = GridSearchCV(model, tuned_parameters,
-                               cv=nb_cv, scoring='%s_macro' % score , verbose = 2) # verbose = 2 to display the parameters used
-            clf.fit(X_train, y_train)
+        # verbose = 2 to display the parameters used
+        clf = GridSearchCV(model, tuned_parameters,
+                           cv=nb_cv, scoring='precision_macro')
+        clf.fit(X_train, y_train)
 
-            print(colored("Best parameters set found on development set:", 'red'))
-            print()
-            print(colored(clf.best_params_, 'red'))
-            print()
-            print("Grid scores on development set:")
-            print()
-            means = clf.cv_results_['mean_test_score']
-            stds = clf.cv_results_['std_test_score']
-            for mean, std, params in zip(means, stds, clf.cv_results_['params']):
-                print("%0.3f (+/-%0.03f) for %r"
-                      % (mean, std * 2, params))
-            print()
+        y_true, y_pred = y_test, clf.predict(X_test)
 
-            print("Detailed classification report:")
-            print()
-            print("The model is trained on the full development set.")
-            print("The scores are computed on the full evaluation set.")
-            print()
-            y_true, y_pred = y_test, clf.predict(X_test)
-            print(classification_report(y_true, y_pred))
-            print()
-            # penser à fonction prédiction simple
+        best_model = clf.best_estimator_
+        best_score = clf.best_score_
+
+        return y_pred, best_model, best_score
+
+    return benchmark_cv_full_reporting(X_train,y_train,X_test, y_test, model,tuned_parameters, nb_cv=5)
