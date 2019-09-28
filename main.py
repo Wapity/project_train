@@ -31,6 +31,7 @@ if __name__ == '__main__':
     y_pred, best_model, score_max  = benchmark_models(
         X_train, X_test, y_train, y_test, input_model, tuning=cross_validation,full_reporting=False)
 
+    
     print(best_model)
     print(score_max)
 
