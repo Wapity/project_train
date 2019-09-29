@@ -8,8 +8,5 @@ def listener():
 
     if input("Use cross validation ? (y/n) ") == 'y' :
         cross_validation = True
-        print(" You selected cross validation ")
 
-    print(" You did not select cross validation")
-    print()
     return input_model, cross_validation

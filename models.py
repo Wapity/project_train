@@ -5,25 +5,20 @@ C = 1.0  # SVM regularization parameter
 
 house_models = {
     'svm': [{
-        'model': SVC(kernel='linear', C=C),
-        'param_cross_validation': None
+        'model': SVC(kernel='linear', C=C)
     },
         {
-        'model': LinearSVC(C=C, max_iter=10000),
-        'param_cross_validation': None
+        'model': LinearSVC(C=C, max_iter=10000)
     },
         {
-        'model': SVC(kernel='rbf', gamma=0.7, C=C),
-        'param_cross_validation': None
+        'model': SVC(kernel='rbf', gamma=0.7, C=C)
     },
         {
-        'model': SVC(kernel='poly', degree=3, gamma='auto', C=C),
-        'param_cross_validation': None
+        'model': SVC(kernel='poly', degree=3, gamma='auto', C=C)
     }],
 
     'random_forest': [{'model': RandomForestClassifier(n_estimators=100, max_depth=2,
-                                                       random_state=0),
-                       'param_cross_validation': None}]
+                                                       random_state=0)}]
 
 }
 

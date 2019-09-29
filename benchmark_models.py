@@ -1,5 +1,5 @@
 
-from utils.list import value_index_max
+from utils import value_index_max
 import matplotlib.pyplot as plt
 from termcolor import colored
 
@@ -27,7 +27,7 @@ def benchmark_models(X_train, X_test, y_train, y_test, famille_de_model, tuning=
         best_model = model_list[index_best_model]
         y_pred = best_model['model'].predict(X_test)
 
-        return y_pred, best_model, score_max
+        return y_pred, best_model['model'], score_max
 
 
     model = house_models_cross_validation[famille_de_model]['model']
