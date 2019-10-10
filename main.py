@@ -7,6 +7,8 @@ from sklearn.metrics import classification_report
 
 from utils import writer, reader
 
+import matplotlib.pyplot as plt
+
 from loader import df_to_X_y
 from benchmark_models import benchmark_models
 from reporting.visualizer import visualizer_images, visualizer_results_images
@@ -20,12 +22,12 @@ warnings.filterwarnings("ignore", message="Precision is ill-defined and being se
 
 if __name__ == '__main__':
 
-    catalog = pd.read_csv(PATH_PRINCETON_DATASET + 'catalog.csv', nrows=500)
+    '''catalog = pd.read_csv(PATH_PRINCETON_DATASET + 'catalog.csv', nrows=500)
 
     X, y = df_to_X_y(catalog, 1, 0)
 
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.10, random_state=42, shuffle=True)
+        X, y, test_size=0.10, random_state=42, shuffle=True)'''
 
     # input_model, cross_validation = listener()
 
@@ -41,8 +43,11 @@ if __name__ == '__main__':
     '''
 
     best_model = reader('best_model')
-    y_pred = best_model.predict(X_test)
 
-    visualizer_images(X_test, 10)
+    abcd = pd.read_csv(PATH_PRINCETON_DATASET + '/tests/abcdefghijklmnopqrstuvwxyz_0.csv')
 
+    y_pred = best_model.predict(abcd.iloc[:, 3:])
+
+    abcd[y_pred==False].plot.scatter('x', 'y')
+    plt.show()
     #visualizer_results_images(X_test, y_pred)
