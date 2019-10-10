@@ -20,6 +20,7 @@ import warnings
 warnings.filterwarnings("ignore", message="Precision is ill-defined and being set to 0.0 in labels with no predicted samples.")
 
 
+
 if __name__ == '__main__':
 
     '''catalog = pd.read_csv(PATH_PRINCETON_DATASET + 'catalog.csv', nrows=500)
